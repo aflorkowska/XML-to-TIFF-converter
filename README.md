@@ -1,6 +1,6 @@
 # XML-to-TIFF-converter
 
-This repo contains converter for histopatological data, saved in pyramidal files. It enables generating mask from xml annotations about the images, both for ground_truth and background masks. 
+This repo contains converter for histopatological data, saved as Pyramid TIFFs. It enables generating mask from xml annotations about the images, both for ground_truth and background masks. 
 It covers also both scenarios: if coordinates in xml file are given in pixels, and in units.
 
 This repo is a part of [HistopathologyAugmentationResearch repository](https://github.com/Jarartur/HistopathologyAugmentationResearch), that is usufull eg. for obtaining xaml annotations.
