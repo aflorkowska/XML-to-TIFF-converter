@@ -60,10 +60,7 @@ def generate_and_save_mask_as_tiff(image_path : Path,
     
     metadata = prepare_metadata(image)
 
-    if xml_data_type == AnnotationDataType.PIXELS_LVL_0.value:
-        factor = (1.0, 1.0)
-    elif xml_data_type == AnnotationDataType.UM_LVL_0.value: 
-        factor = (1.0, 1.0)
+    factor = (1.0, 1.0) if xml_data_type == AnnotationDataType.PIXELS_LVL_0 else (2.0, 2.0)
         # TODO: Calculate scalling factor based on real-world size of the single pixel. 
         #       factor = get_pixel_size_scalling_factor(image_path)
 
