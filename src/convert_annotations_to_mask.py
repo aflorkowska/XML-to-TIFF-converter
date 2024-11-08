@@ -1,7 +1,4 @@
-import os
 import tqdm
-import numpy as np
-import pandas as pd
 from typing import Dict, List, Tuple
 from pathlib import Path
 
@@ -58,6 +55,7 @@ def generate_and_save_mask_as_tiff(image_path : Path,
     """
     image = load_image(image_path)
     if image == None :
+        print(f"An unexpected error occurred while loading image.")
         return
     
     metadata = prepare_metadata(image)

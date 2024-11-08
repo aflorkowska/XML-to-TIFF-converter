@@ -1,12 +1,9 @@
-import os
 import cv2
-import csv
 import pyvips
 import numpy as np
-import pandas as pd
 from pathlib import Path
 import xml.etree.ElementTree as ET
-from typing import Tuple, List, Dict, Set
+from typing import Tuple, List, Dict
 
 def parse_annotation(xml_filepath : Path,
                       unit_scaling_factor = Tuple[float, float]
@@ -139,7 +136,7 @@ def create_array_from_coordinates(image_dim : Tuple[float, float],
                     dtype=np.uint8)
     filled_mask = fill_array_with_poly(mask, all_polys_coordinates, group_to_value)
     mask_rgba = convert_binary_array_to_rgb(filled_mask)
-    
+
     return mask_rgba
 
 def prepare_metadata(image : pyvips.Image) -> Dict[any, any]:
