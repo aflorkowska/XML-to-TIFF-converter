@@ -6,8 +6,3 @@ scikit-learn
 opencv-python
 tqdm
 pyvips
-
-
--e ./HistopathologyAugmentationResearch
--e ./HistopathologyAugmentationResearch[HISTSEG]
-#torchio
