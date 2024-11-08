@@ -5,5 +5,5 @@ ANNOTATION_EXTs = [".xml"]
 
 class AnnotationDataType(Enum):
     PIXELS_LVL_0 = "pixels"
-    UM_LVL_0 = "units"
+    UNITS_LVL_0 = "units"
 
