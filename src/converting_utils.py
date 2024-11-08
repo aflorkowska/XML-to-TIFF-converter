@@ -6,7 +6,7 @@ import xml.etree.ElementTree as ET
 from typing import Tuple, List, Dict
 
 def parse_annotation(xml_filepath : Path,
-                      unit_scaling_factor = Tuple[float, float]
+                     unit_scaling_factor = Tuple[float, float]
                       ) -> Dict[str, List[List[Tuple[float, float]]]]:
     """
     Parse annotations coordinates from xaml file. 
@@ -17,7 +17,7 @@ def parse_annotation(xml_filepath : Path,
         Path to the specific xml file.
     
     unit_scaling_factor = Tuple[float, float]
-        Scalling factors, depending on unit in xml. 
+        Scalling factors, depending on unit in xml eg. real-world pixel size in um.
 
     Returns
     -------
@@ -35,8 +35,8 @@ def parse_annotation(xml_filepath : Path,
         if coords is None:
             continue
         for coord in coords.findall('Coordinate'):
-            x = float(coord.get('X')) * unit_scaling_factor[0]
-            y = float(coord.get('Y')) * unit_scaling_factor[1]
+            x = float(coord.get('X')) / unit_scaling_factor[0]
+            y = float(coord.get('Y')) / unit_scaling_factor[1]
             coords_temp.append((x,y))
 
         if part_of_group not in categorized_coordinates:
@@ -208,3 +208,5 @@ def convert_binary_array_to_rgb(img : np.ndarray) -> np.ndarray:
     rgba_image = np.zeros((height, width, 3), dtype=np.uint8)
     rgba_image[img == 1, :] = [255, 255, 255]  
     return rgba_image
+
+    

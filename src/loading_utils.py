@@ -1,7 +1,7 @@
 import os
 import pyvips
 from pathlib import Path
-from typing import Dict
+from typing import Dict, Tuple
 
 def load_image(path: Path ) -> pyvips.Image:
     """
@@ -21,32 +21,70 @@ def load_image(path: Path ) -> pyvips.Image:
         img = img.flatten(background=255)
     return img
 
-# TODO
-# def get_pixel_size_scalling_factor(img_path : Path) -> Tuple[float, float]:
-#     """
-#     Get pixel size at level 0. 
+def get_pixel_size_scalling_factor_in_um(image : pyvips.Image) -> Tuple[float, float]:
+    """
+    Get pixel size at level 0. 
 
-#     Parameters
-#     ----------
-#     img_path : Path
-#         Path to the image.
+    Parameters
+    ----------
+    image : pyvips.Image
+        Input pyvips image.
 
-#     Returns
-#     -------
-#     Tuple[float, float]
-#         Tuple of pixel size.
+    Returns
+    -------
+    Tuple[float, float]
+        Tuple of pixel size.
 
-#     Raises
-#     ------
-#     ValueError : Image '{img_path}' can not be opended.
-#     """
-#     slide, is_open = open_slide(img_path)
-#     if not is_open:
-#         raise ValueError(f"Image '{img_path}' can not be opended.")
-#     slide_properties = slide.properties
-#     factors = (float(slide_properties['openslide.mpp-x']), float(slide_properties['openslide.mpp-y']))
-#     slide.close()
-#     return factors
+    """
+
+    x_res = get_property_with_default(image, "xres")
+    y_res = get_property_with_default(image, "yres")
+    resolution_unit = get_property_with_default(image, "resolution-unit", "inch")
+
+    if x_res and y_res:
+        if resolution_unit == "inch":
+            UNIT_IN_DPI = 25400
+            x_size_um = UNIT_IN_DPI / x_res
+            y_size_um = UNIT_IN_DPI / y_res
+            return (x_size_um, y_size_um)
+        elif resolution_unit == "cm":
+            UNIT_IN_CM = 10000
+            x_size_um = UNIT_IN_CM / x_res
+            y_size_um = UNIT_IN_CM / y_res
+            return (x_size_um, y_size_um)
+        else:
+            print(f"Unknown resolution unit: {resolution_unit}. The scalling factor is set to (1.0, 1.0)")
+            return (1.0, 1.0)
+    else:
+        print("Resolution information not available in metadata. The scalling factor is set to (1.0, 1.0)")
+        return (1.0, 1.0)
+
+ 
+def get_property_with_default(image : pyvips.Image, 
+                              property_name : str, 
+                              default_value = None):
+    """
+    Retrieve a property from pyvips image with a fallback to a default value.
+
+    Parameters
+    ----------
+    image : pyvips.Image
+        Input image
+    property_name : str
+        Property name as string
+    default_value = None
+        Default value if property is not defined.
+
+    Returns
+    -------
+    value or None
+    """
+    
+    try:
+        return image.get(property_name)
+    except Exception as e:
+        print(f"Error retrieving property {property_name}. Assigning default value: {default_value}")
+        return default_value   
 
 def find_files_with_extension(root_dir : Path, 
                               extensions : list[str]) -> list[Path]:

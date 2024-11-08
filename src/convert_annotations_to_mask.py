@@ -11,7 +11,8 @@ from config import (
 from loading_utils import (
     load_image,
     find_files_with_extension,
-    map_images_to_annotations
+    map_images_to_annotations,
+    get_pixel_size_scalling_factor_in_um
 )
 
 from converting_utils import (
@@ -60,9 +61,7 @@ def generate_and_save_mask_as_tiff(image_path : Path,
     
     metadata = prepare_metadata(image)
 
-    factor = (1.0, 1.0) if xml_data_type == AnnotationDataType.PIXELS_LVL_0 else (2.0, 2.0)
-        # TODO: Calculate scalling factor based on real-world size of the single pixel. 
-        #       factor = get_pixel_size_scalling_factor(image_path)
+    factor = (1.0, 1.0) if xml_data_type == AnnotationDataType.PIXELS_LVL_0 else get_pixel_size_scalling_factor_in_um(image)
 
     coords_polys_lvl0 = parse_annotation(annotation_path,
                                          factor)
