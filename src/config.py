@@ -4,6 +4,6 @@ WSI_EXTs = [".tiff", ".tif", ".mrxs"]
 ANNOTATION_EXTs = [".xml"]
 
 class AnnotationDataType(Enum):
-    PIXELS_LVL_0 = 1
-    UM_LVL_0 = 2
+    PIXELS_LVL_0 = "pixels"
+    UM_LVL_0 = "units"
 
